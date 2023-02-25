@@ -41,7 +41,7 @@ export class Game {
 
     // other update logic (here, create new entities)
     if (this.lastBallCreated + this.newBallInterval < newTime) {
-      const ball = new Ball(this.player.x, 300);
+      const ball = new Ball({ x: this.player.position.x, y: 300 });
       this.entities.push(ball);
       this.lastBallCreated = newTime;
     }

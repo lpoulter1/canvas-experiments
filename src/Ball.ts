@@ -1,29 +1,31 @@
-import { Entity } from "./Enity";
+import { Entity, testCollision, Collision } from "./Enity";
 
-export class Ball extends Entity {
+export class Ball implements Entity {
   speed: number;
   radius: number;
+  position: { x: number; y: number };
+  collision: Collision;
 
-  constructor(x: number, y: number) {
-    super(x, y);
+  constructor(position: { x: number; y: number }) {
+    this.position = position;
     this.collision = "circle";
     this.speed = 300; // px per second
     this.radius = 10; // radius in px
   }
 
   update({ deltaTime }: { deltaTime: number }) {
-    this.y -= (this.speed * deltaTime) / 1000; // deltaTime is ms so we divide by 1000
+    this.position.y -= (this.speed * deltaTime) / 1000; // deltaTime is ms so we divide by 1000
   }
 
   draw(context: CanvasRenderingContext2D) {
     context.beginPath();
-    context.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    context.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI);
     context.fill();
   }
 
-  isDead(player) {
-    const outOfBounds = this.y < 0 - this.radius;
-    const collidesWithPlayer = Entity.testCollision(player, this);
+  isDead(player: Entity) {
+    const outOfBounds = this.position.y < 0 - this.radius;
+    const collidesWithPlayer = testCollision(player, this);
     return outOfBounds || collidesWithPlayer;
   }
 }

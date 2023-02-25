@@ -1,24 +1,29 @@
-import { Entity } from "./Enity";
+import { Collision, Entity, FrameData } from "./Enity";
 
-export class Paddle extends Entity {
+export class Paddle implements Entity {
+  position: { x: number; y: number };
+  collision: Collision;
+  speed: number;
+  width: number;
+  height: number;
+
   constructor() {
-    super(150, 50);
+    this.position = { x: 150, y: 50 };
     this.collision = "rect";
     this.speed = 200;
     this.width = 50;
     this.height = 10;
   }
 
-  update({ deltaTime, inputs }) {
-    this.x += ((this.speed * deltaTime) / 1000) * inputs.direction;
+  update({ deltaTime, inputs }: FrameData) {
+    this.position.x += ((this.speed * deltaTime) / 1000) * inputs.direction;
   }
 
-  /** @param {CanvasRenderingContext2D} context */
-  draw(context) {
+  draw(context: CanvasRenderingContext2D) {
     context.beginPath();
     context.rect(
-      this.x - this.width / 2,
-      this.y - this.height / 2,
+      this.position.x - this.width / 2,
+      this.position.y - this.height / 2,
       this.width,
       this.height
     );
