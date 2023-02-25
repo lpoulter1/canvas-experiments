@@ -91,5 +91,4 @@ class InputsManager {
   }
 }
 
-
 export {};
