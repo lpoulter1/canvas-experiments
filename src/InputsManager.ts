@@ -1,5 +1,5 @@
 export class InputsManager {
-  direction: number;
+  direction: -1 | 0 | 1;
   constructor() {
     this.direction = 0;
     window.addEventListener("keydown", this.onKeydown.bind(this));
