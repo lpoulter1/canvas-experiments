@@ -25,7 +25,8 @@ export class Ball implements Entity {
 
   isDead(player: Entity) {
     const outOfBounds = this.position.y < 0 - this.radius;
+    if (outOfBounds) return true;
     const collidesWithPlayer = testCollision(player, this);
-    return outOfBounds || collidesWithPlayer;
+    return collidesWithPlayer;
   }
 }
