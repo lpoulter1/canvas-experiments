@@ -1,4 +1,5 @@
-import { Entity, testCollision, Collision } from "./Enity";
+import { Entity, Collision } from "./Enity";
+import { Paddle } from "./Paddle";
 
 export class Ball implements Entity {
   speed: number;
@@ -23,10 +24,31 @@ export class Ball implements Entity {
     context.fill();
   }
 
+  testCollision(player: Paddle, ball: Ball) {
+    // this is a waaaaaay simplified collision that just works in this case (circle always comes from the bottom)
+    const topOfBallIsAboveBottomOfRect =
+      ball.position.y - ball.radius <= player.position.y + player.height / 2;
+    const bottomOfBallIsBelowTopOfPlayer =
+      ball.position.y + ball.radius >= player.position.y - player.height / 2;
+    const ballIsRightOfPlayerLeftSide =
+      ball.position.x + ball.radius >= player.position.x - player.width / 2;
+    const ballIsLeftOfPlayerRightSide =
+      ball.position.x - ball.radius <= player.position.x + player.width / 2;
+    return (
+      topOfBallIsAboveBottomOfRect &&
+      bottomOfBallIsBelowTopOfPlayer &&
+      ballIsRightOfPlayerLeftSide &&
+      ballIsLeftOfPlayerRightSide
+    );
+  }
+
   isDead(player: Entity) {
-    const outOfBounds = this.position.y < 0 - this.radius;
-    if (outOfBounds) return true;
-    const collidesWithPlayer = testCollision(player, this);
-    return collidesWithPlayer;
+    if (player instanceof Paddle) {
+      const outOfBounds = this.position.y < 0 - this.radius;
+      if (outOfBounds) return true;
+      const collidesWithPlayer = this.testCollision(player, this);
+      return collidesWithPlayer;
+    }
+    return false;
   }
 }
